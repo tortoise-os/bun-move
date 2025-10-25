@@ -9,6 +9,7 @@ Inspired by [bun-eth](https://github.com/Bun-Eth-Community/bun-eth), adapted for
 - **🚀 Bun-Native**: No transpilation, instant execution
 - **🔗 Sui Move Integration**: Full Move smart contract development
 - **🤖 AI-Ready**: Built-in Walrus + Nautilus TEE support
+- **🔐 awesome-seal Ready**: Security & privacy patterns integrated
 - **⚡ Hot Reload**: Move contracts auto-generate TypeScript types
 - **🐳 Docker Compose**: Complete local development stack
 - **📦 Monorepo**: Shared packages, unified tooling
@@ -300,6 +301,29 @@ docker compose -f docker/docker-compose.yml up api web postgres redis
 - [ ] Phase 3: Cross-Chain - Bridge + RWA + BTCfi (Months 7-9)
 - [ ] Phase 4: Privacy + Markets (Months 10-12)
 
+## Security & Privacy
+
+**awesome-seal Integration**: This project includes comprehensive recommendations for integrating the [awesome-seal](https://github.com/MystenLabs/awesome-seal) ecosystem to enhance security and privacy.
+
+**See [AWESOME_SEAL_EVALUATION.md](./AWESOME_SEAL_EVALUATION.md) for:**
+- 🔒 Encrypted storage with Seal SDK (saves 1-2 weeks)
+- 🛡️ Nautilus TEE integration patterns (saves 2-3 weeks)
+- 🎯 Token-gated access control (saves 1 week)
+- 🔐 Decryptable Move Enum for privacy (saves 1 week)
+- **Total time savings: 6-12 weeks across development lifecycle**
+
+### Quick Start with awesome-seal
+
+```bash
+# Create shared Seal integration package
+mkdir -p packages/seal-integration
+cd packages/seal-integration
+bun add @seal/rust-sdk @seal/access-control
+
+# Add to Move packages
+# See AWESOME_SEAL_EVALUATION.md for Move.toml configuration
+```
+
 ## Resources
 
 - [Sui Documentation](https://docs.sui.io)
@@ -307,6 +331,7 @@ docker compose -f docker/docker-compose.yml up api web postgres redis
 - [Bun Documentation](https://bun.sh/docs)
 - [Walrus Storage](https://docs.walrus.site)
 - [Nautilus TEE](https://nautilus.sui.io)
+- [awesome-seal Ecosystem](https://github.com/MystenLabs/awesome-seal)
 
 ## License
 
