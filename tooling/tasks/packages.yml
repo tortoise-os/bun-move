@@ -1,0 +1,32 @@
+version: '3'
+
+tasks:
+  create:
+    desc: Create a new package interactively
+    dir: "{{.USER_WORKING_DIR}}/tooling/packages"
+    cmds:
+      - bun run create-package.ts
+
+  validate:
+    desc: Validate all package names
+    dir: "{{.USER_WORKING_DIR}}/tooling/packages"
+    cmds:
+      - bun run validate-names.ts
+
+  validate:check:
+    desc: Check a specific package.json file
+    dir: "{{.USER_WORKING_DIR}}/tooling/packages"
+    cmds:
+      - bun run validate-names.ts --check {{.CLI_ARGS}}
+
+  list:
+    desc: List all packages in the monorepo
+    cmds:
+      - |
+        echo "📦 Packages in monorepo:"
+        echo ""
+        find packages -name 'package.json' -maxdepth 2 | while read pkg; do
+          name=$(cat "$pkg" | grep '"name"' | head -1 | cut -d'"' -f4)
+          version=$(cat "$pkg" | grep '"version"' | head -1 | cut -d'"' -f4)
+          echo "  $name@$version"
+        done

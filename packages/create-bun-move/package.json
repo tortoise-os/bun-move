@@ -13,7 +13,8 @@
   "scripts": {
     "build": "bun build src/index.ts --outdir dist --target node --format esm",
     "dev": "bun run src/index.ts",
-    "prepublishOnly": "bun run build"
+    "sync-templates": "../../scripts/sync-templates.sh",
+    "prepublishOnly": "bun run sync-templates && bun run build"
   },
   "keywords": [
     "sui",

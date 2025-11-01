@@ -1,0 +1,71 @@
+name: Validate Package Names
+
+on:
+  pull_request:
+    paths:
+      - '**/package.json'
+  push:
+    branches:
+      - main
+    paths:
+      - '**/package.json'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Validate Package Naming Conventions
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install glob dependency
+        run: bun add -g glob
+
+      - name: Validate all package names
+        run: bun run scripts/validate-package-names.ts
+
+      - name: Post PR comment on failure
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## ❌ Package Name Validation Failed
+
+            Your PR contains package names that violate our naming conventions.
+
+            ### Naming Rules
+
+            **Foundation Packages (@tortoise-os/*):**
+            - ✅ Use generic, reusable names
+            - ✅ Examples: \`@tortoise-os/core\`, \`@tortoise-os/sdk\`, \`@tortoise-os/ui\`
+
+            **Product Packages (@carapace/*, @hatch/*):**
+            - ✅ Use specific, descriptive names
+            - ✅ Examples: \`@carapace/pool-sdk\`, \`@hatch/strategy-sdk\`, \`@carapace/carapace-ui\`
+            - ❌ Forbidden: \`@product/core\`, \`@product/sdk\`, \`@product/ui\` (too generic)
+
+            ### How to Fix
+
+            1. Review the validation errors in the workflow logs above
+            2. Rename packages to follow conventions (see [PACKAGE_STRUCTURE_FINAL.md](../docs/PACKAGE_STRUCTURE_FINAL.md))
+            3. Update all imports in your code
+            4. Push your changes
+
+            ### Need Help?
+
+            See our package naming guide: [PACKAGE_STRUCTURE_FINAL.md](../docs/PACKAGE_STRUCTURE_FINAL.md)
+            `
+            })

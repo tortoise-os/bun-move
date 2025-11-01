@@ -1,0 +1,40 @@
+version: '3'
+
+tasks:
+  setup:
+    desc: Setup publishing for this repository
+    dir: "{{.USER_WORKING_DIR}}/tooling/publishing"
+    cmds:
+      - ./publish-setup.sh
+
+  setup:product:
+    desc: Setup publishing for a product monorepo
+    dir: "{{.USER_WORKING_DIR}}/tooling/publishing"
+    cmds:
+      - ./setup-product-publishing.sh
+
+  dry-run:
+    desc: Dry run package publishing with changesets
+    cmds:
+      - bunx changeset publish --dry-run
+
+  version:
+    desc: Version packages using changesets
+    cmds:
+      - bunx changeset version
+
+  publish:
+    desc: Publish packages (requires npm auth)
+    cmds:
+      - bunx changeset publish
+
+  status:
+    desc: Check changeset status
+    cmds:
+      - bunx changeset status
+
+  templates:sync:
+    desc: Sync validation system to create-bun-move templates
+    dir: "{{.USER_WORKING_DIR}}/tooling/templates"
+    cmds:
+      - ./sync-templates.sh

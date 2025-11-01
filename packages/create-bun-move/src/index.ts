@@ -132,15 +132,16 @@ program
       console.log(chalk.cyan("\n📦 Next steps:\n"));
       console.log(chalk.white(`  cd ${name}`));
       console.log(chalk.white(`  bun install`));
-      
+      console.log(chalk.white(`  bun scripts/setup-git-hooks.sh    # Install package name validation`));
+
       if (config.docker) {
         console.log(chalk.white(`  docker compose up -d`));
       }
-      
+
       if (config.sui) {
         console.log(chalk.white(`  task sui:init`));
       }
-      
+
       console.log(chalk.white(`  bun run dev\n`));
 
       console.log(chalk.cyan("🚀 Happy building with TortoiseOS!\n"));
@@ -711,8 +712,84 @@ By integrating awesome-seal ecosystem:
 
   writeFileSync(join(projectPath, "AWESOME_SEAL_EVALUATION.md"), awesomeSealEval);
 
+  // Copy validation system from templates
+  copyValidationSystem(projectPath, options);
+
   console.log(chalk.green(`\n✓ Created ${options.name}`));
   console.log(chalk.cyan(`\n💡 Tip: Check AWESOME_SEAL_EVALUATION.md for security enhancements`));
+}
+
+function copyValidationSystem(
+  projectPath: string,
+  options: { name: string }
+) {
+  // Determine which template to use (default for now, can be extended)
+  const templateDir = join(__dirname, "../templates/default");
+
+  // Check if template exists
+  if (!existsSync(templateDir)) {
+    console.log(chalk.yellow("\n⚠️  Validation templates not found, skipping..."));
+    return;
+  }
+
+  // Create directories
+  const dirs = [
+    "scripts",
+    ".github/workflows",
+    "docs",
+  ];
+
+  dirs.forEach((dir) => {
+    const targetDir = join(projectPath, dir);
+    if (!existsSync(targetDir)) {
+      mkdirSync(targetDir, { recursive: true });
+    }
+  });
+
+  // Copy validation scripts
+  const scripts = ["validate-package-names.ts", "create-package.ts", "setup-git-hooks.sh"];
+  scripts.forEach((script) => {
+    const source = join(templateDir, "scripts", script);
+    const target = join(projectPath, "scripts", script);
+    if (existsSync(source)) {
+      cpSync(source, target);
+      // Make shell scripts executable
+      if (script.endsWith(".sh")) {
+        try {
+          execSync(`chmod +x "${target}"`);
+        } catch {
+          // Ignore chmod errors on Windows
+        }
+      }
+    }
+  });
+
+  // Copy GitHub workflow
+  const workflowSource = join(templateDir, ".github/workflows/validate-package-names.yml");
+  const workflowTarget = join(projectPath, ".github/workflows/validate-package-names.yml");
+  if (existsSync(workflowSource)) {
+    cpSync(workflowSource, workflowTarget);
+  }
+
+  // Copy documentation
+  const docs = [
+    "PACKAGE_STRUCTURE_FINAL.md",
+    "PACKAGE_NAMING_ENFORCEMENT.md",
+    "QUICK_START_NAMING.md",
+  ];
+  docs.forEach((doc) => {
+    const source = join(templateDir, "docs", doc);
+    const target = join(projectPath, "docs", doc);
+    if (existsSync(source)) {
+      cpSync(source, target);
+    }
+  });
+
+  console.log(chalk.green("\n✓ Validation system installed"));
+  console.log(chalk.cyan("  • Package name validation scripts"));
+  console.log(chalk.cyan("  • Git hooks for enforcement"));
+  console.log(chalk.cyan("  • GitHub Actions CI validation"));
+  console.log(chalk.cyan("  • Complete documentation"));
 }
 
 program.parse();

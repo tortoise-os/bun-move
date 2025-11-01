@@ -1,0 +1,44 @@
+version: '3'
+
+tasks:
+  local:start:
+    desc: Start local Sui network
+    dir: "{{.USER_WORKING_DIR}}/tooling/sui"
+    cmds:
+      - ./start-local.sh
+
+  local:stop:
+    desc: Stop local Sui network
+    cmds:
+      - pkill -f "sui start" || echo "ℹ️  No Sui process found"
+
+  client:status:
+    desc: Show Sui client status
+    cmds:
+      - sui client active-env
+      - sui client active-address
+
+  client:switch:
+    desc: Switch Sui client environment
+    cmds:
+      - sui client switch --env {{.CLI_ARGS}}
+
+  client:envs:
+    desc: List all Sui environments
+    cmds:
+      - sui client envs
+
+  client:addresses:
+    desc: List all Sui addresses
+    cmds:
+      - sui client addresses
+
+  faucet:
+    desc: Request tokens from faucet (testnet/devnet)
+    cmds:
+      - sui client faucet
+
+  version:
+    desc: Show Sui CLI version
+    cmds:
+      - sui --version

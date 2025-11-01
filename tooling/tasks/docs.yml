@@ -1,0 +1,44 @@
+version: '3'
+
+tasks:
+  organize:
+    desc: Organize documentation into standard structure
+    dir: "{{.USER_WORKING_DIR}}/tooling/docs"
+    cmds:
+      - ./organize-docs.sh
+
+  index:
+    desc: Open documentation index
+    cmds:
+      - |
+        if command -v open >/dev/null 2>&1; then
+          open docs/INDEX.md
+        elif command -v xdg-open >/dev/null 2>&1; then
+          xdg-open docs/INDEX.md
+        else
+          cat docs/INDEX.md
+        fi
+
+  serve:
+    desc: Serve documentation locally (if using mdbook or similar)
+    cmds:
+      - echo "Documentation serving not configured yet"
+      - echo "Consider adding mdbook or similar tool"
+
+  stats:
+    desc: Show documentation statistics
+    cmds:
+      - |
+        echo "📊 Documentation Statistics"
+        echo "=========================="
+        echo ""
+        echo "Total files: $(find docs -name '*.md' | wc -l | tr -d ' ')"
+        echo ""
+        echo "By directory:"
+        for dir in docs/*/; do
+          if [ -d "$dir" ]; then
+            count=$(find "$dir" -name '*.md' 2>/dev/null | wc -l | tr -d ' ')
+            dirname=$(basename "$dir")
+            echo "  $dirname: $count files"
+          fi
+        done

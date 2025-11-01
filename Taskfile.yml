@@ -11,9 +11,27 @@ includes:
   deploy: ./tooling/tasks/deploy.yml
   clean: ./tooling/tasks/clean.yml
   ai: ./tooling/tasks/ai.yml
+  packages: ./tooling/tasks/packages.yml
+  docs: ./tooling/tasks/docs.yml
+  publishing: ./tooling/tasks/publishing.yml
+  hooks: ./tooling/tasks/hooks.yml
+  sui: ./tooling/tasks/sui.yml
 
 tasks:
   default:
     desc: List all available tasks
     cmds:
       - task --list-all
+
+  info:
+    desc: Display project information
+    cmds:
+      - echo "🐢 TortoiseOS bun-move"
+      - echo "====================="
+      - echo ""
+      - echo "Foundation framework for TortoiseOS DeFi projects on Sui"
+      - echo ""
+      - echo "📦 Packages:"
+      - task: packages:list
+      - echo ""
+      - echo "Run 'task --list-all' to see all available tasks"

@@ -1,0 +1,31 @@
+version: '3'
+
+tasks:
+  install:
+    desc: Install git hooks for package validation
+    dir: "{{.USER_WORKING_DIR}}/tooling/hooks"
+    cmds:
+      - ./install-hooks.sh
+
+  uninstall:
+    desc: Uninstall git hooks
+    cmds:
+      - |
+        if [ -f .git/hooks/pre-commit ]; then
+          rm .git/hooks/pre-commit
+          echo "✅ Git hooks uninstalled"
+        else
+          echo "ℹ️  No git hooks found"
+        fi
+
+  test:
+    desc: Test git hooks without committing
+    cmds:
+      - |
+        echo "🧪 Testing pre-commit hook..."
+        if [ -f .git/hooks/pre-commit ]; then
+          .git/hooks/pre-commit
+        else
+          echo "❌ No pre-commit hook found. Run 'task hooks:install' first"
+          exit 1
+        fi
