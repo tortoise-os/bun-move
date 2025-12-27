@@ -7,16 +7,20 @@
     "dev": "bun run --watch src/index.ts",
     "build": "echo 'No build needed - Bun runtime'",
     "start": "bun run src/index.ts",
-    "test": "bun test"
+    "test": "bun test",
+    "lint": "echo 'No lint configured'",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf node_modules/.cache"
   },
   "dependencies": {
-    "@tortoise-os/core": "workspace:*",
-    "@tortoise-os/sdk": "workspace:*",
-    "@tortoise-os/ai-integration": "workspace:*",
-    "elysia": "^1.1.0",
+    "@bun-move/env": "workspace:*",
     "@elysiajs/cors": "^1.1.0",
     "@elysiajs/swagger": "^1.1.0",
-    "@mysten/sui.js": "^0.54.1"
+    "@mysten/sui.js": "^0.54.1",
+    "@tortoise-os/ai-integration": "workspace:*",
+    "@tortoise-os/core": "workspace:*",
+    "@tortoise-os/sdk": "workspace:*",
+    "elysia": "^1.1.0"
   },
   "devDependencies": {
     "@types/bun": "^1.1.10"

@@ -22,8 +22,8 @@
     "format": "prettier --write src"
   },
   "dependencies": {
-    "@tortoise-os/core": "workspace:*",
-    "@mysten/sui.js": "^0.54.1"
+    "@mysten/sui.js": "^0.54.1",
+    "@tortoise-os/core": "workspace:*"
   },
   "keywords": [
     "sui",

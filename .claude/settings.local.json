@@ -14,7 +14,9 @@
       "Bash(find:*)",
       "Bash(cat:*)",
       "Bash(npm view:*)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(bunx turbo:*)",
+      "Bash(bunx sherif@latest:*)"
     ],
     "deny": [],
     "ask": []

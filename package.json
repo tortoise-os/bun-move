@@ -5,19 +5,26 @@
   "description": "AI-Native DeFi Operating System on Sui - TortoiseOS Monorepo",
   "workspaces": [
     "apps/*",
-    "packages/*"
+    "packages/*",
+    "tooling/env"
   ],
+  "packageManager": "bun@1.1.26",
   "scripts": {
-    "build": "bun run --filter './packages/*' build",
-    "dev": "bun run --filter './apps/api' dev",
-    "dev:web": "bun run --filter './apps/web' dev",
+    "build": "turbo build",
+    "dev": "turbo dev --parallel",
+    "dev:web": "turbo dev --filter=@bun-move/web",
+    "dev:api": "turbo dev --filter=@bun-move/api",
     "dev:full": "task dev:full",
-    "test": "bun test packages/core packages/sdk",
+    "test": "turbo test --parallel",
     "test:move": "task move:test",
-    "lint": "bun run --filter './apps/*' --filter './packages/*' lint",
-    "format": "bun run --filter './apps/*' --filter './packages/*' format",
+    "lint": "turbo lint && bun lint:repo",
+    "lint:repo": "bunx sherif@latest",
+    "lint:repo:fix": "bunx sherif@latest --fix",
+    "format": "turbo format",
+    "typecheck": "turbo typecheck",
     "deploy": "task move:deploy",
-    "clean": "task clean:all",
+    "clean": "git clean -xdf node_modules",
+    "clean:workspaces": "turbo clean",
     "setup": "task setup",
     "changeset": "changeset",
     "version": "changeset version",
@@ -27,6 +34,7 @@
     "@changesets/cli": "^2.29.7",
     "@types/bun": "^1.1.10",
     "prettier": "^3.3.3",
+    "turbo": "^2.7.2",
     "typescript": "^5.6.2"
   },
   "engines": {
